@@ -1,0 +1,10 @@
+{
+  "companies": ["York University",
+  "CIBC", "Delta Controls", "Bazaar"],
+  "titles":["Research Assistant", "Data Science Intern", "Data Engineer Intern", "Software Engineer Intern"],
+  "time":["4 months", "8 months", "TBD", "6 months"],
+  "languages":["Python", "JavaScript", "Java", "C", "Bash"],
+  "icon_name":["fa-brands fa-Python", "fa-brands fa-js", "fa-brands fa-Java", "", "fa-solid fa-Terminal"],
+  "frameworks": [],
+  "projects":["Movie Recommendation Webapp", "Ray Tracing Animation Engine", "Reverse Shell"]
+}

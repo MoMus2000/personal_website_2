@@ -1,0 +1,171 @@
+<html>
+<head>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+</head>
+<body> 
+	<style>
+		@keyframes flickerAnimation {
+		  0%   { opacity:1; }
+		  50%  { opacity:0; }
+		  100% { opacity:1; }
+		}
+		@-o-keyframes flickerAnimation{
+		  0%   { opacity:1; }
+		  50%  { opacity:0; }
+		  100% { opacity:1; }
+		}
+		@-moz-keyframes flickerAnimation{
+		  0%   { opacity:1; }
+		  50%  { opacity:0; }
+		  100% { opacity:1; }
+		}
+		@-webkit-keyframes flickerAnimation{
+		  0%   { opacity:1; }
+		  50%  { opacity:0; }
+		  100% { opacity:1; }
+		}
+
+		#animate-arrow{
+		   -webkit-animation: flickerAnimation 1s infinite;
+		   -moz-animation: flickerAnimation 1s infinite;
+		   -o-animation: flickerAnimation 1s infinite;
+		    animation: flickerAnimation 1s infinite;
+		}
+	</style>
+
+	<h2 id="animate-arrow"><i class="fa-solid fa-arrow-down" style="position: absolute; bottom: 0px;"></i></h2>
+	<div id="main row" class="row text-center">
+	<div id="main col" class="col-md mb">
+
+    <h2 class="my-5 h2">Mustafa Muhammad<br>Computer Science @ York University 
+    	<i class="fab fa-canadian-maple-leaf"></i> </h2>
+
+    <span id="place-holder"></span>
+
+    <img id="profile" class="rounded-circle z-depth-2" alt="100x100" src="images/rsz_1cp.jpg"
+     data-holder-rendered="true" style="display: none">
+
+    </div>
+ 	</div>
+ 	<div id="secon row" class="row text-center">
+ 	<h1> Reach me @ </h1>
+
+	<div id="secon col" class="col-md mb">
+		<a href="docs/mustafa_14.pdf">
+ 		<h2 id="resume" class="my-5 h3"><i class="fa fa-file"></i></h2>
+ 		</a>
+ 	</div>
+ 	<div id="secon col" class="col-md mb">
+ 		<a href="https://www.github.com/momus2000">
+ 		<h2 id="github" class="my-5 h3"><i class="fa-brands fa-github"></i></h2>
+ 		</a>
+ 	</div>
+ 	<div id="secon col" class="col-md mb">
+ 		<a href="https://www.linkedin.com/in/mustafa0001/">
+ 		<h2 id="linkedin" class="my-5 h3"><i class="fa-brands fa-linkedin-in"></i></h2>
+ 		</a>
+ 	</div>
+ 	<h2 class="my-5 h4">Some Languages that I've worked with</h2>
+
+ 	<span id="populate_lang"></span>
+
+ 	<h2 class="my-5 h4">Some Companies that I've worked at</h2>
+ 	</div>
+
+ 	<span id="populate_cards"></span>
+
+
+	<footer class="bg-light text-center text-lg-start">
+	  <div class="text-center p-3">
+	    <a class="text-dark">Built with Vanilla JS and Bootstraps @ 2022</a>
+	  </div>
+	</footer>
+
+
+	<script>
+		let loaded = false;
+		let arrow_click = false;
+		let arrow = document.getElementById("animate-arrow");
+		let span_con = document.getElementById("populate_cards");
+		arrow.addEventListener("click", function(){
+			span_con.scrollIntoView(true);
+			arrow_click = true;
+			console.log("ok123");
+			arrow.style.display = "none";
+		});
+		var info_json = null;
+		if(!loaded){
+			main_col = document.getElementById("place-holder");
+			add_loader = '<div id="load1 rounded-circle z-depth-2" class="spinner-border"></div>'
+			main_col.innerHTML = add_loader;
+		}
+		let image = document.getElementById("profile");
+		image.addEventListener("load", function(){
+			console.log("image loaded ...");
+			loaded = true;
+			main_col = document.getElementById("place-holder");
+			main_col.style.display = "none";
+			image.style.display = "inline";
+		})
+
+		async function load_info(){
+			var info_json = await fetch("info.json");
+			info_json = await info_json.text();
+			console.log(info_json);
+			info_json = JSON.parse(info_json);
+			populate_cards(info_json);
+			populate_lang(info_json);
+		}
+		function populate_cards(info_json){
+			if(info_json == null){
+				console.log("Error loading json data");
+				return
+			}
+			let span_con = document.getElementById("populate_cards");
+			companies = [];
+			cards = [];
+			for(i =0; i<info_json.companies.length; i++){
+				card = `
+				<div class="card">
+				  <img src="images/${info_json.companies[i]}.png" class="card-img-top" alt="..." width="175" height="175">
+				  <div class="card-body">${info_json.companies[i]}<br> ${info_json.titles[i]}<br> ${info_json.time[i]}</div>
+				</div>
+				`
+				cards.push(card);
+			}
+			let oup = '<div id="secon row" class="row text-center">';
+			for(j=0; j<info_json.companies.length;j++){
+				oup += `
+					<div id="secon col" class="col-md mb">
+					${cards[j]}
+					</div>
+				`
+			}
+			oup += '</div>'
+			span_con.innerHTML = oup;
+		}
+		function populate_lang(info_json){
+			if(info_json == null){
+				console.log("Error loading json");
+				return
+			}
+			let span_lang = document.getElementById("populate_lang");
+			let oup = '<div id="third row" class="row text-center">';
+			for(i = 0; i<info_json.languages.length; i++){
+				oup += `
+				<div class="col-md mb">
+ 					<h2 class="my-5 h3">${info_json.languages[i]}
+ 					<i class="${info_json.icon_name[i]}"></i>
+ 					</h2>
+ 				</div>
+ 				`
+			}
+			oup += '</div>'
+			span_lang.innerHTML = oup;
+		}
+		load_info();
+	</script>
+	<script src="https://kit.fontawesome.com/94eb78299c.js" crossorigin="anonymous"></script>
+</body>
+</html>
